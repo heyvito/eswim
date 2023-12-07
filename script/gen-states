@@ -1,0 +1,75 @@
+#!/usr/bin/env ruby
+
+class App
+  DECLARE_STATE = "// fsmStates:"
+  DECLARE_STATE_END = "// fsmStatesEnd"
+
+  def run
+    Dir["internal/{proto,iputil}/*.go"].each do |file|
+      contents = File.read(file).split("\n")
+      next unless contents.find { _1.include? DECLARE_STATE }
+
+      new_file = process_file(contents)
+      File.write(file, new_file.join("\n"))
+      system("go fmt #{file}")
+    end
+  end
+
+  def process_file(lines)
+    inside = false
+    new_lines = []
+    lines.each do |l|
+      if inside
+        if l.include? DECLARE_STATE_END
+          inside = false
+          new_lines << l
+        end
+      else
+        if l.include? DECLARE_STATE
+          inside = true
+        end
+        new_lines << l
+      end
+    end
+
+    create_states(new_lines)
+  end
+
+  def create_states(lines)
+    new_lines = []
+    lines.each do |l|
+      if l.include? DECLARE_STATE
+        new_lines.append(l, "")
+        new_lines.append(*create_state(l.split(":").last.strip))
+        new_lines.append("")
+      else
+        new_lines << l
+      end
+    end
+    new_lines
+  end
+
+  def create_state(definition)
+    sep = definition.index(" ")
+    name = definition[0..sep].strip
+    states = definition[sep...].split(",").map(&:strip)
+
+    lines = ["type #{name}State uint8", "const ("]
+    states.each.with_index do |n, idx|
+      n = capitalize(n)
+      lines << if idx.zero?
+                 "#{name}State#{n} #{name}State = iota"
+      else
+        "#{name}State#{n}"
+      end
+    end
+    lines << ")"
+    lines
+  end
+
+  def capitalize(name)
+    "#{name[0].upcase}#{name[1...]}"
+  end
+end
+
+App.new.run
