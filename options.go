@@ -199,7 +199,7 @@ func filterIP(list []netip.Addr, filter func(netip.Addr) bool) *netip.Addr {
 		}
 	}
 
-	if anyNonLocal.IsValid() {
+	if anyLocal.IsValid() {
 		return &anyLocal
 	} else if anyNonLocal.IsValid() {
 		return &anyNonLocal
