@@ -119,7 +119,7 @@ func NewTCPControlServer(log *zap.Logger, address proto.IP, port uint16, delegat
 
 	listener, err := net.ListenTCP(network, addr)
 	if err != nil {
-		return nil, fmt.Errorf("failed initializing listener: %w", err)
+		return nil, fmt.Errorf("failed initializing TCP listener: %w", err)
 	}
 
 	return &tcpControlServer{

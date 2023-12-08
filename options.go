@@ -168,23 +168,41 @@ func (o *Options) normalize() error {
 		}
 
 		if o.HostAddresses.IPv4Address == nil {
-			for _, ip := range allIPs {
-				if ip.Is4() {
-					o.HostAddresses.IPv4Address = &ip
-					break
-				}
-			}
+			o.HostAddresses.IPv4Address = filterIP(allIPs, netip.Addr.Is4)
 		}
 
 		if o.HostAddresses.IPv6Address == nil {
-			for _, ip := range allIPs {
-				if ip.Is6() {
-					o.HostAddresses.IPv6Address = &ip
-					break
-				}
-			}
+			o.HostAddresses.IPv6Address = filterIP(allIPs, netip.Addr.Is6)
 		}
 	}
 
+	return nil
+}
+
+func filterIP(list []netip.Addr, filter func(netip.Addr) bool) *netip.Addr {
+	var anyLocal, anyNonLocal netip.Addr
+
+	for _, ip := range list {
+		isLinkLocal := ip.IsLinkLocalUnicast() || ip.IsLinkLocalUnicast()
+		if !filter(ip) {
+			continue
+		}
+
+		if isLinkLocal && !anyLocal.IsValid() {
+			anyLocal = ip
+		} else if !anyNonLocal.IsValid() {
+			anyNonLocal = ip
+		}
+
+		if anyLocal.IsValid() && anyNonLocal.IsValid() {
+			break
+		}
+	}
+
+	if anyNonLocal.IsValid() {
+		return &anyLocal
+	} else if anyNonLocal.IsValid() {
+		return &anyNonLocal
+	}
 	return nil
 }
