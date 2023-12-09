@@ -40,7 +40,13 @@ type tcpControlServer struct {
 }
 
 func (t *tcpControlServer) Dial(addr net.IP, port uint16) (TCPControlClient, error) {
-	conn, err := net.Dial(t.network, fmt.Sprintf("%s:%d", addr, port))
+	var strAddr string
+	if v4 := addr.To4(); v4 != nil {
+		strAddr = fmt.Sprintf("%s:%d", addr, port)
+	} else {
+		strAddr = fmt.Sprintf("[%s]:%d", addr, port)
+	}
+	conn, err := net.Dial(t.network, strAddr)
 	if err != nil {
 		return nil, err
 	}
