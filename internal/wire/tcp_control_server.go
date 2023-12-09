@@ -20,7 +20,7 @@ type TCPControlServer interface {
 	Shutdown()
 
 	// Dial opens a new socket to a remote control server specified by addr
-	Dial(addr net.IP, port uint16) (TCPControlClient, error)
+	Dial(addr proto.IP, port uint16) (TCPControlClient, error)
 }
 
 // TCPControlServerDelegate implements methods that allow handling of incoming
@@ -39,9 +39,9 @@ type tcpControlServer struct {
 	network  string
 }
 
-func (t *tcpControlServer) Dial(addr net.IP, port uint16) (TCPControlClient, error) {
+func (t *tcpControlServer) Dial(addr proto.IP, port uint16) (TCPControlClient, error) {
 	var strAddr string
-	if v4 := addr.To4(); v4 != nil {
+	if addr.AddressKind == proto.AddressIPv4 {
 		strAddr = fmt.Sprintf("%s:%d", addr, port)
 	} else {
 		strAddr = fmt.Sprintf("[%s]:%d", addr, port)

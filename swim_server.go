@@ -143,7 +143,7 @@ func (s *swimServer) DispatchTCPPacket(_ core.SyncManager, msg proto.Message, cl
 }
 
 func (s *swimServer) EstablishTCP(_ core.SyncManager, node proto.Node) (wire.TCPControlClient, error) {
-	return s.tcpControl.Dial(node.Address.Bytes(), s.opts.SWIMPort)
+	return s.tcpControl.Dial(node.Address, s.opts.SWIMPort)
 }
 
 func (s *swimServer) AllKnownNodes(core.SyncManager) []proto.Node {
