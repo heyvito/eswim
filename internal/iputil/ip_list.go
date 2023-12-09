@@ -2,7 +2,6 @@ package iputil
 
 import (
 	"fmt"
-	"github.com/heyvito/gateway"
 	"net"
 	"net/netip"
 	"slices"
@@ -37,33 +36,6 @@ func LocalAddresses() (IPList, error) {
 	}
 
 	return addrIPs, nil
-}
-
-func GetDefaultIP(preferIPv6 bool) (addr netip.Addr, err error) {
-	var ips []netip.Addr
-	ips, err = gateway.FindDefaultIPs()
-	if err != nil {
-		return
-	}
-
-	if preferIPv6 {
-		for _, v := range ips {
-			if v.Is6() {
-				return v, nil
-			}
-		}
-	} else {
-		for _, v := range ips {
-			return v, nil
-		}
-	}
-
-	for _, v := range ips {
-		return v, nil
-	}
-
-	err = NoAddressErr
-	return
 }
 
 func ConvertNetIP(in net.IP) netip.Addr {

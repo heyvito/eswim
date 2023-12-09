@@ -2,7 +2,7 @@ package eswim
 
 import (
 	"fmt"
-	"github.com/heyvito/gateway"
+	"github.com/heyvito/defip"
 	"go.uber.org/zap"
 	"math"
 	"net/netip"
@@ -123,6 +123,12 @@ type Options struct {
 }
 
 func (o *Options) normalize() error {
+	if o.LogHandler == nil {
+		o.LogHandler = zap.NewNop()
+	}
+
+	logger := o.LogHandler.With(zap.String("facility", "options"))
+
 	if !o.InsecureDisableCrypto && len(o.CryptoKey) != 16 {
 		return fmt.Errorf("CryptoKey must have 16 bytes")
 	}
@@ -157,52 +163,27 @@ func (o *Options) normalize() error {
 		}
 	}
 
-	if o.LogHandler == nil {
-		o.LogHandler = zap.NewNop()
-	}
-
 	if o.HostAddresses.IPv4Address == nil || o.HostAddresses.IPv6Address == nil {
-		allIPs, err := gateway.FindDefaultIPs()
-		if err != nil {
-			return fmt.Errorf("failed detecting IP addresses: %w", err)
-		}
-
 		if o.HostAddresses.IPv4Address == nil {
-			o.HostAddresses.IPv4Address = filterIP(allIPs, netip.Addr.Is4)
+			if ip, err := defip.FindDefaultIP(defip.NetRouteKindV4); err == nil {
+				o.HostAddresses.IPv4Address = ip
+				logger.Debug("Automatically selected IPv4", zap.String("addr", ip.String()))
+			} else {
+				logger.Warn("IPv4 has not been explicitly disabled, but no usable IPv4 could be found. Disabling...")
+				o.HostAddresses.IPv4Address = IgnoreFamilyAddr
+			}
 		}
 
 		if o.HostAddresses.IPv6Address == nil {
-			o.HostAddresses.IPv6Address = filterIP(allIPs, netip.Addr.Is6)
+			if ip, err := defip.FindDefaultIP(defip.NetRouteKindV6); err == nil {
+				o.HostAddresses.IPv6Address = ip
+				logger.Debug("Automatically selected IPv6", zap.String("addr", ip.String()))
+			} else {
+				logger.Warn("IPv6 has not been explicitly disabled, but no usable IPv6 could be found. Disabling...")
+				o.HostAddresses.IPv6Address = IgnoreFamilyAddr
+			}
 		}
 	}
 
-	return nil
-}
-
-func filterIP(list []netip.Addr, filter func(netip.Addr) bool) *netip.Addr {
-	var anyLocal, anyNonLocal netip.Addr
-
-	for _, ip := range list {
-		isLinkLocal := ip.IsLinkLocalUnicast() || ip.IsLinkLocalUnicast()
-		if !filter(ip) {
-			continue
-		}
-
-		if isLinkLocal && !anyLocal.IsValid() {
-			anyLocal = ip
-		} else if !anyNonLocal.IsValid() {
-			anyNonLocal = ip
-		}
-
-		if anyLocal.IsValid() && anyNonLocal.IsValid() {
-			break
-		}
-	}
-
-	if anyLocal.IsValid() {
-		return &anyLocal
-	} else if anyNonLocal.IsValid() {
-		return &anyNonLocal
-	}
 	return nil
 }
