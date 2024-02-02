@@ -4,18 +4,22 @@ import (
 	"fmt"
 	"github.com/heyvito/eswim/internal/core"
 	"github.com/heyvito/eswim/internal/iputil"
-	"github.com/heyvito/eswim/internal/proto"
 	"go.uber.org/zap"
-	"net/http"
-	"strings"
+	"net/netip"
 )
 
-type Server struct {
+type Server interface {
+	Start()
+	Shutdown()
+	GetKnownNodes() []netip.Addr
+}
+
+type server struct {
 	opts               *Options
 	v4Server, v6Server *swimServer
 }
 
-func NewServer(opts *Options) (*Server, error) {
+func NewServer(opts *Options) (Server, error) {
 	var err error
 	if err = opts.normalize(); err != nil {
 		return nil, err
@@ -66,56 +70,40 @@ func NewServer(opts *Options) (*Server, error) {
 		return nil, fmt.Errorf("failed initializing IPv6 server: %w", err)
 	}
 
-	return &Server{opts, v4Server, v6Server}, nil
+	return &server{opts, v4Server, v6Server}, nil
 }
 
-func (s *Server) Start() {
+func (s *server) Start() {
 	if s.v4Server != nil {
 		s.v4Server.Start()
 	}
 	if s.v6Server != nil {
 		s.v6Server.Start()
 	}
-
-	go func() {
-		http.ListenAndServe(":2727", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			str := strings.Builder{}
-			dumpServerState("IPv4", &str, s.v4Server)
-			dumpServerState("IPv6", &str, s.v6Server)
-			w.Header().Add("Content-Type", "text/plain")
-			_, _ = w.Write([]byte(str.String()))
-		}))
-	}()
 }
 
-func dumpServerState(name string, str *strings.Builder, server *swimServer) {
-	if server == nil {
-		return
-	}
-
-	str.WriteString(name + "\n")
-	str.WriteString("==========================\n")
-	str.WriteString(fmt.Sprintf("Address: %s\n", server.hostAddress.String()))
-	str.WriteString(fmt.Sprintf("Period: %d\n", server.loop.CurrentPeriod()))
-	str.WriteString(fmt.Sprintf("Incarnation: %d\n\n", server.incarnation))
-
-	str.WriteString("Known Nodes\n")
-	server.nodes.Range(core.NodeTypeInvalid, func(n *proto.Node) bool {
-		str.WriteString("  - " + n.String() + "\n")
-		return true
-	})
-
-	str.WriteString("\nGossips\n")
-	for _, e := range server.gossip.CurrentGossips() {
-		str.WriteString("  - " + e.String() + "\n")
-	}
-}
-
-func (s *Server) Shutdown() {
+func (s *server) Shutdown() {
 	if s.v4Server != nil {
 		s.v4Server.Shutdown()
 	}
 	if s.v6Server != nil {
 		s.v6Server.Shutdown()
 	}
+}
+
+func (s *server) GetKnownNodes() []netip.Addr {
+	var list []netip.Addr
+	filter := core.NodeTypeStable | core.NodeTypeStable
+	if s.v4Server != nil {
+		for _, v := range s.v4Server.nodes.All(filter) {
+			list = append(list, v.Address.IntoManaged())
+		}
+	}
+	if s.v6Server != nil {
+		for _, v := range s.v6Server.nodes.All(filter) {
+			list = append(list, v.Address.IntoManaged())
+		}
+	}
+
+	return list
 }
