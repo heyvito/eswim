@@ -366,7 +366,7 @@ func (s *stateServer) start() {
 				if !s.hub.hasClient {
 					continue
 				}
-				convertedGossip := stateGossipFromEvent(ev.Payload.(proto.Event))
+				convertedGossip := stateGossipFromEvent(*ev.Payload.(*proto.Event))
 				convertedGossip.Direction = ev.direction
 				convertedGossip.Timestamp = ev.ts.Format("02-Jan 15:04:05")
 				ev.Payload = convertedGossip
