@@ -43,6 +43,7 @@ type swimServer struct {
 	indirectPingCallbacks containers.SyncMap[uint32, pingCallbackFn]
 
 	lastFullSyncNode proto.NodeHash
+	ipClass          string
 }
 
 func newSwimServer(bindAddress netip.Addr, allIPs iputil.IPList, opts *Options) (*swimServer, error) {
@@ -67,6 +68,7 @@ func newSwimServer(bindAddress netip.Addr, allIPs iputil.IPList, opts *Options) 
 		opts:        opts,
 		ascon:       ascon,
 		hostAddress: selfAddress,
+		ipClass:     ipClass,
 
 		bootstrapResponse:  make(chan *proto.Packet, 32),
 		bootstrapCompleted: make(chan bool, 2),
@@ -334,6 +336,7 @@ func (s *swimServer) processPingEvents(events []proto.Event) {
 	for _, e := range events {
 		func(ev proto.Event) {
 			s.gossip.Add(&ev)
+			sharedStateServer.registerGossip("In", s.ipClass, &ev)
 		}(e)
 
 		if s.isEventLocal(e) {
@@ -527,7 +530,16 @@ func (s *swimServer) DispatchMulticast(message proto.Message) {
 
 func (s *swimServer) NextProbeSubject() *proto.Node { return s.nodes.NextPing() }
 
-func (s *swimServer) GossipEvents(maxLen int) []proto.Event { return s.gossip.Next(maxLen) }
+func (s *swimServer) GossipEvents(maxLen int) []proto.Event {
+	list := s.gossip.Next(maxLen)
+	go func(list []proto.Event) {
+		for _, v := range list {
+			v := v
+			sharedStateServer.registerGossip("Out", s.ipClass, &v)
+		}
+	}(list)
+	return list
+}
 
 func (s *swimServer) DispatchMessage(dst net.IP, message proto.Message) {
 	buf := proto.EncPkt(s.incarnation, message)

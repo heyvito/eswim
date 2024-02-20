@@ -1,10 +1,8 @@
 <html>
 <head>
-    <title>eSWIM State: 10.0.10.10</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans&display=swap" rel="stylesheet">
-    <meta http-equiv="refresh" content="3">
 
     <style>
         html, body, div, span, applet, object, iframe,
@@ -27,7 +25,7 @@
             font: inherit;
             vertical-align: baseline;
         }
-        /* HTML5 display-role reset for older browsers */
+
         article, aside, details, figcaption, figure,
         footer, header, hgroup, menu, nav, section {
             display: block;
@@ -64,31 +62,22 @@
             width: 100%;
             display: flex;
             justify-content: center;
-            font-size: 15;
-        }
-
-        main {
+            font-size: 13px;
             padding: 27px 25px;
-            width: 740px;
             color: #FFFFFF;
-            font-family: 'IBM Plex Sans', sans-serif;
+            font-family: 'IBM Plex Sans';
             font-style: normal;
             font-weight: 400;
         }
 
-        .mono {
-            font-family: 'IBM Plex Mono', monospace;
-            font-style: normal;
-            font-weight: 500;
-            font-size: 15px;
-            line-height: 20px;
-            letter-spacing: 0.1em;
+        main {
+            width: 1184px;
         }
 
         h1 {
             font-size: 32px;
             line-height: 42px;
-            margin-bottom: 26px;
+            margin-bottom: 25px;
         }
 
         h2 {
@@ -100,66 +89,96 @@
         h3 {
             font-size: 15px;
             line-height: 20px;
-            margin-bottom: 8px;
         }
 
         p {
-            margin-bottom: 2px;
             font-size: 12px;
             line-height: 16px;
+            margin-bottom: 2px;
+
             color: #9E9E9E;
         }
 
-        section {
-            width: 100%;
+        .panels {
+            margin-top: 12px;
+            display: flex;
+            gap: 8px;
+        }
 
+        .panels > div {
+            flex-grow: 1;
             background: #1A1A1A;
             box-shadow: inset 0px 1px 7px rgba(0, 0, 0, 0.25);
             border-radius: 4px;
             padding: 12px;
-            margin-top: 8px;
+            max-height: 500px;
+            overflow-y: scroll;
+        }
+
+        .table-wrapper {
+            background: #141414;
+            border-radius: 4px;
+            padding-bottom: 6px;
+            margin: 8px 0 25px 0;
         }
 
         table {
-            background: #141414;
-            width: 100%;
-            padding: 8px 0;
-            color: #fff;
             border-radius: 4px;
-            margin-bottom: 24px;
+            width: 100%;
         }
 
-        thead {
-            border-bottom: 3px solid #191919;
+        table thead tr td {
+            font-size: 15px;
         }
 
-        thead td {
-            padding: 8px 0 12px;
+        table thead td:first-of-type {
+            padding: 8px 12px 8px;
         }
 
-        thead td:first-of-type, tbody td:first-of-type {
-            padding-left: 12px;
+        table thead td:last-of-type {
+            padding-right: 12px;
         }
 
-        tbody tr:nth-child(even) {
+        table thead {
+            border-bottom: 3px solid #1a1a1a;
+        }
+
+        table tbody tr:nth-child(even) {
             background-color: #1C1C1C;
         }
 
-        tbody td {
-            padding: 12px 0;
+        table tbody tr:hover {
+            background-color: #282828;
+        }
+
+        table tbody td {
+            padding: 8px 8px 8px 0;
+        }
+
+        table tbody td:first-of-type {
+            padding: 8px 8px 8px 8px;
+        }
+
+        .mono {
+            font-family: 'IBM Plex Mono';
+            font-style: normal;
+            font-weight: 450;
+            font-size: 13px;
+            line-height: 17px;
+            letter-spacing: 0.1em;
         }
 
         .label {
             padding: 2px 8px;
+            background: #246D18;
             border-radius: 6px;
-
-            font-family: 'IBM Plex Mono', monospace;
+            text-transform: uppercase;
+            font-family: 'IBM Plex Mono';
             font-style: normal;
             font-weight: 600;
-            font-size: 15px;
-            line-height: 20px;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
+            font-size: 13px;
+            line-height: 17px;
+            letter-spacing: 0.2em;
         }
 
         .label.stable { background: #246D18; }
@@ -171,116 +190,133 @@
         .label.wrap { background: #6C186D; }
         .label.healthy { background: #246D18; }
 
-        .server {
-            margin-bottom: 30px;
+        .toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        a {
+            color: #fff;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
 <main>
     <h1>eSWIM State Monitor</h1>
-
-    <div class="server">
+    <section class="server" data-server-kind="ipv4">
         <h2>IPv4 Server: 10.0.10.10</h2>
-        <p>TCP Port: 7337</p>
-        <p>UDP Port: 7338</p>
-        <p>Incarnation: 1</p>
+        <p>TCP Port: 1337</p>
+        <p>UDP Port: 1338</p>
+        <p>Incarnation: <span class="incarnation"></span></p>
+        <p>Period: <span class="period"></span></p>
 
-        <section>
-            <h3>Known Members</h3>
-            <table>
-                <thead>
-                <tr>
-                    <td>IP</td>
-                    <td>State</td>
-                    <td>Incarnation</td>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td class="mono">000.000.000.000</td>
-                    <td><span class="label stable">Stable</span></td>
-                    <td class="mono">1</td>
-                </tr>
-                <tr>
-                    <td class="mono">000.000.000.000</td>
-                    <td><span class="label suspect">Suspect</span></td>
-                    <td class="mono">1</td>
-                </tr>
-                </tbody>
-            </table>
-            <h3>Current Gossips</h3>
-            <table>
-                <thead>
-                <tr>
-                    <td>Source</td>
-                    <td>Kind</td>
-                    <td>Subject</td>
-                    <td>Incarnation</td>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td class="mono">000.000.000.000</td>
-                    <td><span class="label suspect">Suspect</span></td>
-                    <td class="mono">000.000.000.000</td>
-                    <td class="mono">1</td>
-                </tr>
-                </tbody>
-            </table>
-        </section>
-    </div>
+        <div class="panels">
+            <div class="state">
+                <h3>Known Members</h3>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                        <tr>
+                            <td>IP</td>
+                            <td>State</td>
+                            <td>Inc</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="mono">000.000.000.000</td>
+                            <td><span class="label stable">stable</span></td>
+                            <td class="mono">1</td>
+                        </tr>
+                        <tr>
+                            <td class="mono">000.000.000.000</td>
+                            <td><span class="label suspect">suspect</span></td>
+                            <td class="mono">2</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
 
-    <div class="server">
-        <h2>IPv4 Server: 10.0.10.10</h2>
-        <p>TCP Port: 7337</p>
-        <p>UDP Port: 7338</p>
-        <p>Incarnation: 1</p>
-
-        <section>
-            <h3>Known Members</h3>
-            <table>
-                <thead>
-                <tr>
-                    <td>IP</td>
-                    <td>State</td>
-                    <td>Incarnation</td>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td class="mono">000.000.000.000</td>
-                    <td><span class="label stable">Stable</span></td>
-                    <td class="mono">1</td>
-                </tr>
-                <tr>
-                    <td class="mono">000.000.000.000</td>
-                    <td><span class="label suspect">Suspect</span></td>
-                    <td class="mono">1</td>
-                </tr>
-                </tbody>
-            </table>
-            <h3>Current Gossips</h3>
-            <table>
-                <thead>
-                <tr>
-                    <td>Source</td>
-                    <td>Kind</td>
-                    <td>Subject</td>
-                    <td>Incarnation</td>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td class="mono">000.000.000.000</td>
-                    <td><span class="label suspect">Suspect</span></td>
-                    <td class="mono">000.000.000.000</td>
-                    <td class="mono">1</td>
-                </tr>
-                </tbody>
-            </table>
-        </section>
-    </div>
+                <h3>Current Gossips</h3>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                        <tr>
+                            <td>Source</td>
+                            <td>Kind</td>
+                            <td>Subject</td>
+                            <td>Inc</td>
+                        </tr>
+                        <tbody>
+                        <tr>
+                            <td class="mono">000.000.000.000</td>
+                            <td><span class="label suspect">suspect</span></td>
+                            <td class="mono">000.000.000.000</td>
+                            <td class="mono">1</td>
+                        </tr>
+                        </tbody>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+            <div class="gossips">
+                <div class="toolbar">
+                    <h3>Exchanged Gossips</h3>
+                    <a href="#" class="clear-gossips">Clear</a>
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                        <tr>
+                            <td>Dir</td>
+                            <td>Timestamp</td>
+                            <td>Source</td>
+                            <td>Kind</td>
+                            <td>Subject</td>
+                            <td>Inc</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="mono">Out</td>
+                            <td class="mono">20-Feb 00:00:00</td>
+                            <td class="mono">000.000.000.000</td>
+                            <td class="mono"><span class="label left">left</span></td>
+                            <td class="mono">000.000.000.000</td>
+                            <td class="mono">198290</td>
+                        </tr>
+                        <tr>
+                            <td class="mono">Out</td>
+                            <td class="mono">20-Feb 00:00:00</td>
+                            <td class="mono">000.000.000.000</td>
+                            <td class="mono"><span class="label alive">alive</span></td>
+                            <td class="mono">000.000.000.000</td>
+                            <td class="mono">198290</td>
+                        </tr>
+                        <tr>
+                            <td class="mono">Out</td>
+                            <td class="mono">20-Feb 00:00:00</td>
+                            <td class="mono">000.000.000.000</td>
+                            <td class="mono"><span class="label suspect">suspect</span></td>
+                            <td class="mono">000.000.000.000</td>
+                            <td class="mono">198290</td>
+                        </tr>
+                        <tr>
+                            <td class="mono">Out</td>
+                            <td class="mono">20-Feb 00:00:00</td>
+                            <td class="mono">000.000.000.000</td>
+                            <td class="mono"><span class="label faulty">faulty</span></td>
+                            <td class="mono">000.000.000.000</td>
+                            <td class="mono">198290</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
 </main>
 </body>
 </html>

@@ -10,3 +10,6 @@ var StatePageServer string
 
 //go:embed footer.html
 var StatePageFooter string
+
+//go:embed script.js
+var StatePageScript string

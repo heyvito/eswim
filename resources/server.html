@@ -1,64 +1,100 @@
-<div class="server">
-    <h2>IPv4 Server: {{ .ServerIP }}</h2>
+<section class="server" data-server-kind="{{ .IPClass }}">
+    <h2>IP{{ .IPClass }} Server: {{ .ServerIP }}</h2>
     <p>TCP Port: {{ .TCPPort }}</p>
     <p>UDP Port: {{ .UDPPort }}</p>
-    <p>Incarnation: {{ .Incarnation }}</p>
-    <p>Period: {{ .Period }}</p>
+    <p>Incarnation: <span class="incarnation">{{ .Incarnation }}</span></p>
+    <p>Period: <span class="period">{{ .Period }}</span></p>
 
-    <section>
-        <h3>Known Members</h3>
-        <table>
-            <thead>
-            <tr>
-                <td>IP</td>
-                <td>State</td>
-                <td>Incarnation</td>
-            </tr>
-            </thead>
-            <tbody>
-            {{range .Members}}
-            <tr>
-                <td class="mono">{{.IP}}</td>
-                <td><span class="label {{ .Status }}">{{.Status}}</span></td>
-                <td class="mono">{{.Incarnation}}</td>
-            </tr>
-            {{else}}
-            <tr>
-                <td>No known members</td>
-                <td></td>
-                <td></td>
-            </tr>
-            {{end}}
-            </tbody>
-        </table>
-        <h3>Current Gossips</h3>
-        <table>
-            <thead>
-            <tr>
-                <td>Source</td>
-                <td>Kind</td>
-                <td>Subject</td>
-                <td>Incarnation</td>
-            </tr>
-            </thead>
-            <tbody>
-            {{range .Gossips}}
-            <tr>
-                <td class="mono">{{.Source}}</td>
-                <td><span class="label {{.Kind}}">{{.Kind}}</span></td>
-                <td class="mono">{{.Subject}}</td>
-                <td class="mono">{{.Incarnation}}</td>
-            </tr>
-            {{else}}
-            <tr>
-                <td>No gossips</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            {{end}}
-            </tbody>
-        </table>
-    </section>
-</div>
+    <div class="panels">
+        <div class="state">
+            <h3>Known Members</h3>
+            <div class="table-wrapper">
+                <table class="members-table">
+                    <thead>
+                    <tr>
+                        <td>IP</td>
+                        <td>State</td>
+                        <td>Inc</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{range .Members}}
+                    <tr>
+                        <td class="mono">{{.IP}}</td>
+                        <td><span class="label {{ .Status }}">{{.Status}}</span></td>
+                        <td class="mono">{{.Incarnation}}</td>
+                    </tr>
+                    {{else}}
+                    <tr>
+                        <td>No known members</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    {{end}}
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Current Gossips</h3>
+            <div class="table-wrapper">
+                <table class="gossips-table">
+                    <thead>
+                    <tr>
+                        <td>Source</td>
+                        <td>Kind</td>
+                        <td>Subject</td>
+                        <td>Inc</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{range .Gossips}}
+                    <tr>
+                        <td class="mono">{{.Source}}</td>
+                        <td><span class="label {{.Kind}}">{{.Kind}}</span></td>
+                        <td class="mono">{{.Subject}}</td>
+                        <td class="mono">{{.Incarnation}}</td>
+                    </tr>
+                    {{else}}
+                    <tr class="empty">
+                        <td>No gossips</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    {{end}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="gossips">
+            <div class="toolbar">
+                <h3>Exchanged Gossips</h3>
+                <a href="#" class="clear-gossips">Clear</a>
+            </div>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                    <tr>
+                        <td>Dir</td>
+                        <td>Timestamp</td>
+                        <td>Source</td>
+                        <td>Kind</td>
+                        <td>Subject</td>
+                        <td>Inc</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td class="mono"></td>
+                        <td class="mono">Waiting for Data</td>
+                        <td class="mono"></td>
+                        <td class="mono"></td>
+                        <td class="mono"></td>
+                        <td class="mono"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
