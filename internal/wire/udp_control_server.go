@@ -50,7 +50,7 @@ func NewUDPControlServer(logger *zap.Logger, address proto.IP, swimPort uint16, 
 	}
 
 	return &udpControlServer{
-		log:      logger.With(zap.String("facility", "udp_control_server"), zap.String("network", network)),
+		log:      logger.Named("udp_control_server").With(zap.String("network", network)),
 		network:  network,
 		address:  addr,
 		delegate: delegate,

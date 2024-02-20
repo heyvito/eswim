@@ -30,7 +30,7 @@ type SyncManagerDelegate interface {
 
 func NewSyncManager(logger *zap.Logger, delegate SyncManagerDelegate) SyncManager {
 	return &syncManager{
-		logger:              logger.With(zap.String("facility", "sync-manager")),
+		logger:              logger.Named("sync-manager"),
 		delegate:            delegate,
 		acceptBootstrapFrom: nil,
 	}

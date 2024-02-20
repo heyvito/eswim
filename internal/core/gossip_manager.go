@@ -38,7 +38,7 @@ func NewGossipManager(logger *zap.Logger, maxTx int) GossipManager {
 	return &gossipManager{
 		maxTx: maxTx,
 		queue: make([]*gossipItem, 0, 64),
-		log:   logger.With(zap.String("facility", "gossip_manager")),
+		log:   logger.Named("gossip_manager"),
 	}
 }
 

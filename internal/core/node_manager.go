@@ -49,7 +49,7 @@ func NewNodeManager(logger *zap.Logger, selfAddr proto.IP) NodeManager {
 		selfAddr:    selfAddr,
 		nodeList:    NewNodeList(logger, selfAddr).(*nodeList),
 		nodesToPing: nil,
-		logger:      logger.With(zap.String("facility", "node_manager")),
+		logger:      logger.Named("node_manager"),
 	}
 }
 

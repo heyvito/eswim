@@ -129,7 +129,7 @@ func NewTCPControlServer(log *zap.Logger, address proto.IP, port uint16, delegat
 	}
 
 	return &tcpControlServer{
-		log:      log.With(zap.String("facility", "tcp_control_server"), zap.String("network", network)),
+		log:      log.Named("tcp_control_server").With(zap.String("network", network)),
 		network:  network,
 		listener: listener,
 		address:  addr,

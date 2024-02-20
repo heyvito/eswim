@@ -127,7 +127,9 @@ func (o *Options) normalize() error {
 		o.LogHandler = zap.NewNop()
 	}
 
-	logger := o.LogHandler.With(zap.String("facility", "options"))
+	o.LogHandler = o.LogHandler.Named("eswim")
+
+	logger := o.LogHandler.Named("options")
 
 	if !o.InsecureDisableCrypto && len(o.CryptoKey) != 16 {
 		return fmt.Errorf("CryptoKey must have 16 bytes")

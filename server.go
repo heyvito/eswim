@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/heyvito/eswim/internal/core"
 	"github.com/heyvito/eswim/internal/iputil"
-	"go.uber.org/zap"
 	"net/netip"
 )
 
@@ -25,7 +24,7 @@ func NewServer(opts *Options) (Server, error) {
 		return nil, err
 	}
 
-	logger := opts.LogHandler.With(zap.String("facility", "server"))
+	logger := opts.LogHandler.Named("server")
 
 	addrs := opts.HostAddresses
 	if addrs.IPv6Address == nil {

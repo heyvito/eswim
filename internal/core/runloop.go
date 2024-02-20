@@ -77,7 +77,7 @@ type RunLoopDelegate interface {
 // NewRunLoop returns a new RunLoop
 func NewRunLoop(log *zap.Logger, protocolPeriod time.Duration, delegate RunLoopDelegate, udpMaxLen int, useAdaptivePing bool, syncProtoRounds int) RunLoop {
 	r := &runLoop{
-		log:              log.With(zap.String("facility", "runloop")),
+		log:              log.Named("runloop"),
 		running:          false,
 		incomingMessages: make(chan *proto.Packet, 10),
 		period: &runLoopPeriod{

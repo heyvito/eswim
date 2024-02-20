@@ -116,7 +116,7 @@ func NewNodeList(logger *zap.Logger, selfAddr proto.IP) NodeList {
 		stable:     map[proto.NodeHash]*proto.Node{},
 		suspects:   map[proto.NodeHash]*Suspect{},
 		mu:         sync.RWMutex{},
-		logger:     logger.With(zap.String("facility", "node_list")),
+		logger:     logger.Named("node_list"),
 	}
 }
 

@@ -50,7 +50,7 @@ func newSwimServer(bindAddress netip.Addr, allIPs iputil.IPList, opts *Options) 
 	if bindAddress.Is6() {
 		ipClass = "v6"
 	}
-	logger := opts.LogHandler.With(zap.String("facility", "swim-"+ipClass))
+	logger := opts.LogHandler.Named("swim-" + ipClass)
 
 	ascon, err := core.NewASCON(opts.CryptoKey)
 	if err != nil {

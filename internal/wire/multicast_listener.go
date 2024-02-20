@@ -56,8 +56,7 @@ func NewMulticastCommunicator(logger *zap.Logger, multicastAddress string, multi
 		network = "udp6"
 	}
 
-	log := logger.With(
-		zap.String("facility", "multicast_listener"),
+	log := logger.Named("multicast_listener").With(
 		zap.String("network", network),
 		zap.String("address", multicastAddress))
 
