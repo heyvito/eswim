@@ -92,7 +92,7 @@
 			children[0].classList.add("mono");
 			children[0].innerText = gossip.source || "";
 
-			children[1].append(makeLabel(gossip.kind));
+			children[1].append(this.makeLabel(gossip.kind));
 
 			children[2].classList.add("mono");
 			children[2].innerText = gossip.subject || "";
