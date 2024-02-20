@@ -232,6 +232,10 @@ type EventEncoder interface {
 	Invalidates(other *Event) bool
 }
 
+type EventWithSource interface {
+	GetSource() IP
+}
+
 var (
 	u16Marshal = binary.BigEndian.PutUint16
 	u32Marshal = binary.BigEndian.PutUint32

@@ -31,6 +31,7 @@ func (j *Join) FromNode(n *Node) {
 func (j *Join) SetSource(addr *IP)     { copyIP(&j.Source, addr) }
 func (j *Join) GetIncarnation() uint16 { return j.Incarnation }
 func (j *Join) GetSubject() IP         { return j.Subject }
+func (j *Join) GetSource() IP          { return j.Source }
 
 // fsmStates: joinDecoder source, subject, incarnation
 

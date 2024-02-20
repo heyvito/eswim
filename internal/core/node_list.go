@@ -24,7 +24,7 @@ const (
 	NodeTypeRemote
 
 	NodeTypeInvalid NodeType = 0
-	nodeTypeAll              = NodeTypeStable | NodeTypeSuspect
+	NodeTypeAll              = NodeTypeStable | NodeTypeSuspect
 )
 
 // Suspect represents a suspect node in the cluster
@@ -180,7 +180,7 @@ func (n *nodeList) Range(filter NodeType, fn func(n *proto.Node) bool) {
 	defer n.mu.RUnlock()
 
 	if filter == NodeTypeInvalid {
-		filter = nodeTypeAll
+		filter = NodeTypeAll
 	}
 
 	wantsRemote := filter.Remote()

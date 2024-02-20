@@ -32,6 +32,7 @@ func (s *Suspect) FromNode(n *Node) {
 }
 func (s *Suspect) GetIncarnation() uint16 { return s.Incarnation }
 func (s *Suspect) GetSubject() IP         { return s.Subject }
+func (s *Suspect) GetSource() IP          { return s.Source }
 
 // fsmStates: suspectDecoder source, subject, incarnation
 

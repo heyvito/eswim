@@ -1,0 +1,286 @@
+<html>
+<head>
+    <title>eSWIM State: 10.0.10.10</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans&display=swap" rel="stylesheet">
+    <meta http-equiv="refresh" content="3">
+
+    <style>
+        html, body, div, span, applet, object, iframe,
+        h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+        a, abbr, acronym, address, big, cite, code,
+        del, dfn, em, img, ins, kbd, q, s, samp,
+        small, strike, strong, sub, sup, tt, var,
+        b, u, i, center,
+        dl, dt, dd, ol, ul, li,
+        fieldset, form, label, legend,
+        table, caption, tbody, tfoot, thead, tr, th, td,
+        article, aside, canvas, details, embed,
+        figure, figcaption, footer, header, hgroup,
+        menu, nav, output, ruby, section, summary,
+        time, mark, audio, video {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            font-size: 100%;
+            font: inherit;
+            vertical-align: baseline;
+        }
+        /* HTML5 display-role reset for older browsers */
+        article, aside, details, figcaption, figure,
+        footer, header, hgroup, menu, nav, section {
+            display: block;
+        }
+        body {
+            line-height: 1;
+        }
+        ol, ul {
+            list-style: none;
+        }
+        blockquote, q {
+            quotes: none;
+        }
+        blockquote:before, blockquote:after,
+        q:before, q:after {
+            content: '';
+            content: none;
+        }
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+
+        /* ////////////////////////////////////////////////////////////////////// */
+
+        html {
+            background: #242424;
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            height: 100%;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            font-size: 15;
+        }
+
+        main {
+            padding: 27px 25px;
+            width: 740px;
+            color: #FFFFFF;
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-style: normal;
+            font-weight: 400;
+        }
+
+        .mono {
+            font-family: 'IBM Plex Mono', monospace;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 15px;
+            line-height: 20px;
+            letter-spacing: 0.1em;
+        }
+
+        h1 {
+            font-size: 32px;
+            line-height: 42px;
+            margin-bottom: 26px;
+        }
+
+        h2 {
+            font-size: 20px;
+            line-height: 26px;
+            margin-bottom: 2px;
+        }
+
+        h3 {
+            font-size: 15px;
+            line-height: 20px;
+            margin-bottom: 8px;
+        }
+
+        p {
+            margin-bottom: 2px;
+            font-size: 12px;
+            line-height: 16px;
+            color: #9E9E9E;
+        }
+
+        section {
+            width: 100%;
+
+            background: #1A1A1A;
+            box-shadow: inset 0px 1px 7px rgba(0, 0, 0, 0.25);
+            border-radius: 4px;
+            padding: 12px;
+            margin-top: 8px;
+        }
+
+        table {
+            background: #141414;
+            width: 100%;
+            padding: 8px 0;
+            color: #fff;
+            border-radius: 4px;
+            margin-bottom: 24px;
+        }
+
+        thead {
+            border-bottom: 3px solid #191919;
+        }
+
+        thead td {
+            padding: 8px 0 12px;
+        }
+
+        thead td:first-of-type, tbody td:first-of-type {
+            padding-left: 12px;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #1C1C1C;
+        }
+
+        tbody td {
+            padding: 12px 0;
+        }
+
+        .label {
+            padding: 2px 8px;
+            border-radius: 6px;
+
+            font-family: 'IBM Plex Mono', monospace;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 15px;
+            line-height: 20px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .label.stable { background: #246D18; }
+        .label.join { background: #186D59; }
+        .label.suspect { background: #6C6D18; }
+        .label.faulty { background: #6D3218; }
+        .label.left { background: #6D4618; }
+        .label.alive { background: #436D18; }
+        .label.wrap { background: #6C186D; }
+        .label.healthy { background: #246D18; }
+
+        .server {
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+<main>
+    <h1>eSWIM State Monitor</h1>
+
+    <div class="server">
+        <h2>IPv4 Server: 10.0.10.10</h2>
+        <p>TCP Port: 7337</p>
+        <p>UDP Port: 7338</p>
+        <p>Incarnation: 1</p>
+
+        <section>
+            <h3>Known Members</h3>
+            <table>
+                <thead>
+                <tr>
+                    <td>IP</td>
+                    <td>State</td>
+                    <td>Incarnation</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="mono">000.000.000.000</td>
+                    <td><span class="label stable">Stable</span></td>
+                    <td class="mono">1</td>
+                </tr>
+                <tr>
+                    <td class="mono">000.000.000.000</td>
+                    <td><span class="label suspect">Suspect</span></td>
+                    <td class="mono">1</td>
+                </tr>
+                </tbody>
+            </table>
+            <h3>Current Gossips</h3>
+            <table>
+                <thead>
+                <tr>
+                    <td>Source</td>
+                    <td>Kind</td>
+                    <td>Subject</td>
+                    <td>Incarnation</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="mono">000.000.000.000</td>
+                    <td><span class="label suspect">Suspect</span></td>
+                    <td class="mono">000.000.000.000</td>
+                    <td class="mono">1</td>
+                </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <div class="server">
+        <h2>IPv4 Server: 10.0.10.10</h2>
+        <p>TCP Port: 7337</p>
+        <p>UDP Port: 7338</p>
+        <p>Incarnation: 1</p>
+
+        <section>
+            <h3>Known Members</h3>
+            <table>
+                <thead>
+                <tr>
+                    <td>IP</td>
+                    <td>State</td>
+                    <td>Incarnation</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="mono">000.000.000.000</td>
+                    <td><span class="label stable">Stable</span></td>
+                    <td class="mono">1</td>
+                </tr>
+                <tr>
+                    <td class="mono">000.000.000.000</td>
+                    <td><span class="label suspect">Suspect</span></td>
+                    <td class="mono">1</td>
+                </tr>
+                </tbody>
+            </table>
+            <h3>Current Gossips</h3>
+            <table>
+                <thead>
+                <tr>
+                    <td>Source</td>
+                    <td>Kind</td>
+                    <td>Subject</td>
+                    <td>Incarnation</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="mono">000.000.000.000</td>
+                    <td><span class="label suspect">Suspect</span></td>
+                    <td class="mono">000.000.000.000</td>
+                    <td class="mono">1</td>
+                </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<div class="server">
+    <h2>IPv4 Server: {{ .ServerIP }}</h2>
+    <p>TCP Port: {{ .TCPPort }}</p>
+    <p>UDP Port: {{ .UDPPort }}</p>
+    <p>Incarnation: {{ .Incarnation }}</p>
+    <p>Period: {{ .Period }}</p>
+
+    <section>
+        <h3>Known Members</h3>
+        <table>
+            <thead>
+            <tr>
+                <td>IP</td>
+                <td>State</td>
+                <td>Incarnation</td>
+            </tr>
+            </thead>
+            <tbody>
+            {{range .Members}}
+            <tr>
+                <td class="mono">{{.IP}}</td>
+                <td><span class="label {{ .Status }}">{{.Status}}</span></td>
+                <td class="mono">{{.Incarnation}}</td>
+            </tr>
+            {{else}}
+            <tr>
+                <td>No known members</td>
+                <td></td>
+                <td></td>
+            </tr>
+            {{end}}
+            </tbody>
+        </table>
+        <h3>Current Gossips</h3>
+        <table>
+            <thead>
+            <tr>
+                <td>Source</td>
+                <td>Kind</td>
+                <td>Subject</td>
+                <td>Incarnation</td>
+            </tr>
+            </thead>
+            <tbody>
+            {{range .Gossips}}
+            <tr>
+                <td class="mono">{{.Source}}</td>
+                <td><span class="label {{.Kind}}">{{.Kind}}</span></td>
+                <td class="mono">{{.Subject}}</td>
+                <td class="mono">{{.Incarnation}}</td>
+            </tr>
+            {{else}}
+            <tr>
+                <td>No gossips</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            {{end}}
+            </tbody>
+        </table>
+    </section>
+</div>

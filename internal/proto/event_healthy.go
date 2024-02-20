@@ -18,6 +18,7 @@ func (h *Healthy) SubjectAddressKind() AddressKind { return h.Subject.AddressKin
 func (h *Healthy) SetSource(ip *IP)                { copyIP(&h.Subject, ip) }
 func (h *Healthy) GetIncarnation() uint16          { return h.Incarnation }
 func (h *Healthy) GetSubject() IP                  { return h.Subject }
+func (h *Healthy) GetSource() IP                   { return h.Source }
 
 func (h *Healthy) FromNode(n *Node) {
 	copyIP(&h.Subject, &n.Address)

@@ -21,6 +21,8 @@ type TCPControlServer interface {
 
 	// Dial opens a new socket to a remote control server specified by addr
 	Dial(addr proto.IP, port uint16) (TCPControlClient, error)
+
+	Address() *net.TCPAddr
 }
 
 // TCPControlServerDelegate implements methods that allow handling of incoming
@@ -104,6 +106,10 @@ func (t *tcpControlServer) loop() {
 		}
 		t.makeClient(conn)
 	}
+}
+
+func (t *tcpControlServer) Address() *net.TCPAddr {
+	return t.address
 }
 
 // NewTCPControlServer returns a new TCPControlServer

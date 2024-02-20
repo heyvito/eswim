@@ -27,6 +27,7 @@ func main() {
 		InsecureDisableCrypto:  true,
 		UseAdaptivePingTimeout: false,
 		LogHandler:             logger,
+		StateServerPort:        8000,
 	}
 	srv, err := eswim.NewServer(&opts)
 	if err != nil {

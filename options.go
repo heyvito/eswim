@@ -120,6 +120,12 @@ type Options struct {
 	// amount of times, it is discarded from the local buffer. Defaults to
 	// 3⌈max(log(N + 1), 1)⌉.
 	MaxEventTransmission func(clusterSize int) int
+
+	// StateServerPort, when set to a non-negative number greater than zero,
+	// starts an HTTP server on the provided port that can be used to monitor
+	// the state of active eSWIM servers (tcp4, tcp6). Enabling this option in
+	// production environments is highly discouraged.
+	StateServerPort int
 }
 
 func (o *Options) normalize() error {

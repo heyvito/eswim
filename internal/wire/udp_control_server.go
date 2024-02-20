@@ -30,6 +30,8 @@ type UDPControlServer interface {
 	// WriteUDP writes a given data buffer to the specified address and port.
 	// Returns the amount of bytes written, or an error
 	WriteUDP(target *net.UDPAddr, data []byte) (int, error)
+
+	Address() *net.UDPAddr
 }
 
 // NewUDPControlServer returns a new UDPControlServer
@@ -127,4 +129,8 @@ func (u *udpControlServer) Shutdown() {
 			u.log.Error("Failed closing UDP control listener", zap.Error(err))
 		}
 	}
+}
+
+func (u *udpControlServer) Address() *net.UDPAddr {
+	return u.address
 }

@@ -16,6 +16,7 @@ type Server interface {
 type server struct {
 	opts               *Options
 	v4Server, v6Server *swimServer
+	stateServer        *stateServer
 }
 
 func NewServer(opts *Options) (Server, error) {
@@ -69,7 +70,17 @@ func NewServer(opts *Options) (Server, error) {
 		return nil, fmt.Errorf("failed initializing IPv6 server: %w", err)
 	}
 
-	return &server{opts, v4Server, v6Server}, nil
+	srv := &server{opts: opts, v4Server: v4Server, v6Server: v6Server}
+	if opts.StateServerPort > 0 {
+		var stateServer *stateServer
+		stateServer, err = newStateServer(logger, srv, opts.StateServerPort)
+		if err != nil {
+			return nil, fmt.Errorf("failed initializing state server: %w", err)
+		}
+		srv.stateServer = stateServer
+	}
+
+	return srv, nil
 }
 
 func (s *server) Start() {
@@ -79,9 +90,15 @@ func (s *server) Start() {
 	if s.v6Server != nil {
 		s.v6Server.Start()
 	}
+	if s.stateServer != nil {
+		s.stateServer.start()
+	}
 }
 
 func (s *server) Shutdown() {
+	if s.stateServer != nil {
+		s.stateServer.stop()
+	}
 	if s.v4Server != nil {
 		s.v4Server.Shutdown()
 	}

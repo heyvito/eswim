@@ -32,6 +32,7 @@ func (f *Faulty) FromNode(n *Node) {
 func (f *Faulty) SetSource(addr *IP)     { copyIP(&f.Source, addr) }
 func (f *Faulty) GetIncarnation() uint16 { return f.Incarnation }
 func (f *Faulty) GetSubject() IP         { return f.Subject }
+func (f *Faulty) GetSource() IP          { return f.Source }
 
 // fsmStates: faultyDecoder source, subject, incarnation
 
