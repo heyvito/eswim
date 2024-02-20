@@ -130,7 +130,7 @@
 			children[2].innerText = (member.incarnation || 0).toString();
 
 			const tr = document.createElement("tr");
-			children.forEach(i => tr.append(tr));
+			children.forEach(i => tr.append(i));
 			return tr;
 		}
 
