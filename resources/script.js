@@ -116,7 +116,7 @@
 
 		makeLabel(value) {
 			const span = document.createElement("span");
-			span.classList.add(`label ${value}`);
+			span.classList.add("label", value);
 			span.innerText = value;
 			return span;
 		}
