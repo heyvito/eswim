@@ -70,7 +70,7 @@
 			}
 
 			this.components.membersBody
-				.replaceChildren(list.map(i => this.makeKnownMember(i)));
+				.replaceChildren(...list.map(i => this.makeKnownMember(i)));
 
 			if (this.components.membersBody.children.length === 0) {
 				this.components.membersBody.append(this.makeEmptyKnownMember());
