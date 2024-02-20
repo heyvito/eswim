@@ -125,7 +125,7 @@
 			const children = this.makeTableDataCell(3);
 			children[0].classList.add("mono");
 			children[0].innerText = member.ip;
-			children[1].append(makeLabel(member.status));
+			children[1].append(this.makeLabel(member.status));
 			children[2].classList.add("mono");
 			children[2].innerText = (member.incarnation || 0).toString();
 
