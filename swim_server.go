@@ -417,6 +417,7 @@ func (s *swimServer) processPingEvents(events []proto.Event) {
 	}
 
 	if reannounce {
+		reannounce = false
 		s.gossip.Add(&proto.Event{
 			Payload: &proto.Alive{
 				Subject:     s.hostAddress,
