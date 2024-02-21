@@ -277,14 +277,15 @@ func (s *swimServer) HandleUDPControlMessage(server wire.UDPControlServer, data 
 			Address:     proto.IPFromNetIP(pkt.Source),
 		}
 
+		src := pkt.Source.String()
 		s.logger.Debug("Ping received",
-			zap.String("source", pkt.Source.String()),
+			zap.String("source", src),
 			logutil.StringerArr("events", msg.Events))
 
 		s.nodes.Add(s.loop.CurrentPeriod(), node)
 		s.nodes.MarkStable(node.Hash())
 
-		s.processPingEvents(msg.Events)
+		s.processPingEvents(msg.Events, src)
 
 	case *proto.Pong:
 		s.logger.Debug("Pong received", zap.String("source", pkt.Source.String()))
@@ -329,14 +330,14 @@ func (s *swimServer) isEventLocal(event proto.Event) bool {
 	return event.Payload.GetSubject().Equal(&s.hostAddress)
 }
 
-func (s *swimServer) processPingEvents(events []proto.Event) {
+func (s *swimServer) processPingEvents(events []proto.Event, src string) {
 	lastIncarnation := -1
 	period := s.loop.CurrentPeriod()
 	reannounce := false
 	for _, e := range events {
 		func(ev proto.Event) {
 			s.gossip.Add(&ev)
-			sharedStateServer.registerGossip("In", s.ipClass, &ev)
+			sharedStateServer.registerGossip("In", s.ipClass, &ev, src)
 		}(e)
 
 		if s.isEventLocal(e) {
@@ -417,7 +418,6 @@ func (s *swimServer) processPingEvents(events []proto.Event) {
 	}
 
 	if reannounce {
-		reannounce = false
 		s.gossip.Add(&proto.Event{
 			Payload: &proto.Alive{
 				Subject:     s.hostAddress,
@@ -536,7 +536,7 @@ func (s *swimServer) GossipEvents(maxLen int) []proto.Event {
 	go func(list []proto.Event) {
 		for _, v := range list {
 			v := v
-			sharedStateServer.registerGossip("Out", s.ipClass, &v)
+			sharedStateServer.registerGossip("Out", s.ipClass, &v, "")
 		}
 	}(list)
 	return list

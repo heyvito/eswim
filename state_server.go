@@ -64,6 +64,7 @@ type stateGossip struct {
 
 	Direction string `json:"direction,omitempty"`
 	Timestamp string `json:"timestamp,omitempty"`
+	Relay     string `json:"relay,omitempty"`
 
 	// Always available:
 
@@ -91,6 +92,7 @@ type stateUpdate struct {
 	// Used exclusively by gossips
 	ts        time.Time
 	direction string
+	relay     string
 
 	Kind       string `json:"kind,omitempty"`
 	ServerKind string `json:"serverKind,omitempty"`
@@ -369,6 +371,7 @@ func (s *stateServer) start() {
 				convertedGossip := stateGossipFromEvent(*ev.Payload.(*proto.Event))
 				convertedGossip.Direction = ev.direction
 				convertedGossip.Timestamp = ev.ts.Format("02-Jan 15:04:05")
+				convertedGossip.Relay = ev.relay
 				ev.Payload = convertedGossip
 				s.hub.broadcast <- ev
 			}
@@ -427,13 +430,14 @@ func (s *stateServer) serviceClient(conn *websocket.Conn) {
 	go c.readPump()
 }
 
-func (s *stateServer) registerGossip(direction, serverKind string, event *proto.Event) {
+func (s *stateServer) registerGossip(direction, serverKind string, event *proto.Event, src string) {
 	if s == nil {
 		return
 	}
 	s.gossipIntake <- stateUpdate{
 		ts:        time.Now(),
 		direction: direction,
+		relay:     src,
 
 		Kind:       "gossip",
 		ServerKind: serverKind,

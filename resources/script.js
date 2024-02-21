@@ -144,14 +144,15 @@
 		}
 
 		makeGossipItem(gossip) {
-			const children = this.makeTableDataCell(6);
+			const children = this.makeTableDataCell(7);
 			children.forEach(i => i.classList.add("mono"));
 			children[0].innerText = gossip.direction;
 			children[1].innerText = gossip.timestamp;
-			children[2].innerText = gossip.source;
-			children[3].append(this.makeLabel(gossip.kind));
-			children[4].innerText = gossip.subject;
-			children[5].innerText = (gossip.incarnation || 0).toString();
+			children[2].innerText = gossip.relay || "";
+			children[3].innerText = gossip.source || "";
+			children[4].append(this.makeLabel(gossip.kind));
+			children[5].innerText = gossip.subject;
+			children[6].innerText = (gossip.incarnation || 0).toString();
 
 			const tr = document.createElement("tr");
 			children.forEach(i => tr.append(i));
@@ -159,7 +160,7 @@
 		}
 
 		makeGossipWaitingForData() {
-			const children = this.makeTableDataCell(6);
+			const children = this.makeTableDataCell(7);
 			children[1].innerText = "Waiting for data";
 			children[1].classList.add("mono");
 
