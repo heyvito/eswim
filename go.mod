@@ -3,12 +3,12 @@ module github.com/heyvito/eswim
 go 1.21.1
 
 require (
-	github.com/cloudflare/circl v1.3.6
-	github.com/heyvito/defip v0.1.2
+	github.com/cloudflare/circl v1.3.8
+	github.com/heyvito/defip v0.1.3
 	github.com/influxdata/tdigest v0.0.1
-	github.com/stretchr/testify v1.8.4
-	go.uber.org/zap v1.26.0
-	golang.org/x/sys v0.15.0
+	github.com/stretchr/testify v1.9.0
+	go.uber.org/zap v1.27.0
+	golang.org/x/sys v0.20.0
 )
 
 require (
